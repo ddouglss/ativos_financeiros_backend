@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: investimento
+      MYSQL_USER: root
+      MYSQL_PASSWORD: aurora
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastify-backend
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "mysql://root:aurora@db:3306/investimento"
+      NODE_ENV: "production"
+    depends_on:
+      - db
+    restart: always
+
+volumes:
+  mysql-data:
