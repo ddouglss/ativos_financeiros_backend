@@ -13,3 +13,23 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Cliente {
+  @@map("cliente")
+
+  id      String  @id
+  nome    String
+  email   String
+  status  Boolean
+  ativos  Ativo[]
+}
+
+model Ativo {
+  @@map("ativos")
+
+  id         String   @id
+  nome       String
+  valorAtual Decimal
+  clientId   String
+  cliente    Cliente  @relation(fields: [clientId], references: [id])
+}

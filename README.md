@@ -14,4 +14,4 @@ env.ts: Carrega e valida variáveis de ambiente.
 
 app.ts: Criação da instância Fastify.
 
-index.ts: Inicializa e sobe o servidor.
+main.ts: Inicializa e sobe o servidor.
