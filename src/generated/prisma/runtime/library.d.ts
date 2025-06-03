@@ -70,7 +70,7 @@ export declare type Args_3<T, F extends Operation> = Args<T, F>;
 
 /**
  * Original `quaint::ValueType` enum tag from Prisma's `quaint`.
- * Query arguments marked with this type are sanitized before being sent to the database.
+ * Query arguments marked with this type are sanitized before being sent to the api.
  * Notice while a query argument may be `null`, `ArgType` is guaranteed to be defined.
  */
 declare type ArgType = 'Int32' | 'Int64' | 'Float' | 'Double' | 'Text' | 'Enum' | 'EnumArray' | 'Bytes' | 'Boolean' | 'Char' | 'Array' | 'Numeric' | 'Json' | 'Xml' | 'Uuid' | 'DateTime' | 'Date' | 'Time' | 'Unknown';
@@ -1392,7 +1392,7 @@ declare type Field = ReadonlyDeep_2<{
      */
     type: string;
     /**
-     * Native database type, if specified.
+     * Native api type, if specified.
      * For example, `@db.VarChar(191)` is encoded as `['VarChar', ['191']]`,
      * `@db.Text` is encoded as `['Text', []]`.
      */
@@ -1562,7 +1562,7 @@ export declare function getPrismaClient(config: GetPrismaClientConfig): {
         $on<E extends ExtendedEventType>(eventType: E, callback: EventCallback<E>): any;
         $connect(): Promise<void>;
         /**
-         * Disconnect from the database
+         * Disconnect from the api
          */
         $disconnect(): Promise<void>;
         /**
@@ -1861,7 +1861,7 @@ export declare type InputJsonObject = {
  *
  * \`null\` cannot be used as the value of a JSON field because its meaning
  * would be ambiguous. Use \`Prisma.JsonNull\` to store the JSON null value or
- * \`Prisma.DbNull\` to clear the JSON value and set the field to the database
+ * \`Prisma.DbNull\` to clear the JSON value and set the field to the api
  * NULL value instead.
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
@@ -3398,16 +3398,16 @@ declare interface SqlQueryable extends Queryable<SqlQuery, SqlResultSet> {
 
 declare interface SqlResultSet {
     /**
-     * List of column types appearing in a database query, in the same order as `columnNames`.
+     * List of column types appearing in a api query, in the same order as `columnNames`.
      * They are used within the Query Engine to convert values from JS to Quaint values.
      */
     columnTypes: Array<ColumnType>;
     /**
-     * List of column names appearing in a database query, in the same order as `columnTypes`.
+     * List of column names appearing in a api query, in the same order as `columnTypes`.
      */
     columnNames: Array<string>;
     /**
-     * List of rows retrieved from a database query.
+     * List of rows retrieved from a api query.
      * Each row is a list of values, whose length matches `columnNames` and `columnTypes`.
      */
     rows: Array<Array<unknown>>;

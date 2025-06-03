@@ -27,7 +27,7 @@ export type Ativo = $Result.DefaultSelection<Prisma.$AtivoPayload>
 /**
  * ##  Prisma Client ʲˢ
  *
- * Type-safe database client for TypeScript & Node.js
+ * Type-safe api client for TypeScript & Node.js
  * @example
  * ```
  * const prisma = new PrismaClient()
@@ -48,7 +48,7 @@ export class PrismaClient<
     /**
    * ##  Prisma Client ʲˢ
    *
-   * Type-safe database client for TypeScript & Node.js
+   * Type-safe api client for TypeScript & Node.js
    * @example
    * ```
    * const prisma = new PrismaClient()
@@ -64,12 +64,12 @@ export class PrismaClient<
   $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): PrismaClient;
 
   /**
-   * Connect with the database
+   * Connect with the api
    */
   $connect(): $Utils.JsPromise<void>;
 
   /**
-   * Disconnect from the database
+   * Disconnect from the api
    */
   $disconnect(): $Utils.JsPromise<void>;
 
@@ -291,7 +291,7 @@ export namespace Prisma {
   }
 
   /**
-   * Helper for filtering JSON entries that have `null` on the database (empty on the db)
+   * Helper for filtering JSON entries that have `null` on the api (empty on the db)
    *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */

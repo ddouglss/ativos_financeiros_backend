@@ -1,10 +1,10 @@
-import * as crypto from "node:crypto";
-
 export type AtivosProps = {
     id: string;
     nome: string;
     valorAtual: number;
     clientId: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 };
 
 export class FinancaAtivo {
@@ -15,6 +15,10 @@ export class FinancaAtivo {
             id: crypto.randomUUID(),
             ...props,
         });
+    }
+
+    public static with(props: AtivosProps): FinancaAtivo {
+        return new FinancaAtivo(props);
     }
 
     public get id() {
@@ -31,6 +35,14 @@ export class FinancaAtivo {
 
     public get clientId() {
         return this._props.clientId;
+    }
+
+    public get createdAt() {
+        return this._props.createdAt;
+    }
+
+    public get updatedAt() {
+        return this._props.updatedAt;
     }
 
     public toObject() {

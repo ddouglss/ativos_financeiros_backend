@@ -5,6 +5,8 @@ export type ClientProps = {
     nome: string;
     email: string;
     status: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
 };
 
 export class Client {
@@ -17,6 +19,10 @@ export class Client {
             email,
             status,
         });
+    }
+
+    public static with(props: ClientProps): Client {
+        return new Client(props);
     }
 
     public get id() {
@@ -38,4 +44,6 @@ export class Client {
     public toObject() {
         return { ...this._props };
     }
+
+
 }
