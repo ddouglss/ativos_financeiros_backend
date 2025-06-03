@@ -10,11 +10,11 @@ export type DeleteClientOutputDTO = {
     message: string;
 };
 
-export class DeleteClientUseCase implements UseCase<DeleteClientInputDTO, DeleteClientOutputDTO> {
+export class DeleteClienteUsecase implements UseCase<DeleteClientInputDTO, DeleteClientOutputDTO> {
     private constructor(private readonly clienteGateway: ClienteGateway) {}
 
     public static create(clienteGateway: ClienteGateway) {
-        return new DeleteClientUseCase(clienteGateway);
+        return new DeleteClienteUsecase(clienteGateway);
     }
 
     public async execute(input: DeleteClientInputDTO): Promise<DeleteClientOutputDTO> {
