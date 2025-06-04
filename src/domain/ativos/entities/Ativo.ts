@@ -1,3 +1,5 @@
+import * as crypto from "node:crypto";
+
 export type AtivosProps = {
     id: string;
     nome: string;
@@ -10,11 +12,14 @@ export type AtivosProps = {
 export class FinancaAtivo {
     private constructor(private _props: AtivosProps) {}
 
-    public static create(props: Omit<AtivosProps, "id">): FinancaAtivo {
+    public static create(nome: string, valorAtual: number, clientId: string): FinancaAtivo {
         return new FinancaAtivo({
             id: crypto.randomUUID(),
-            ...props,
+            nome,
+            valorAtual,
+            clientId
         });
+
     }
 
     public static with(props: AtivosProps): FinancaAtivo {

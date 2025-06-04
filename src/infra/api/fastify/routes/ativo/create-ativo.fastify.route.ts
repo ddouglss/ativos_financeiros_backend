@@ -1,57 +1,49 @@
-import { HttpMethod, Route } from "@/infra/api/fastify/routes/route";
-import { ListFinancialAssetsUseCase } from "@/usecases/ativo/create-ativo/list-ativos.usecase";
-import { FastifyRequest, FastifyReply } from "fastify";
+import { FastifyInstance } from "fastify";
+import {HttpMethod, Route} from "@/infra/api/fastify/routes/route";
+import {CreateAtivoUseCase} from "@/usecases/ativo/create-ativo/create-ativos.usecase";
+import {FinancaAtivo} from "@/domain/ativos/entities/Ativo";
+import {z} from "zod";
 
-export type ListFinancialAssetsResponseDTO = {
-    ativos: {
-        id: string;
-        nome: string;
-        valorAtual: number;
-        clientId: string;
-    }[];
-};
+export class CreateFinancialAssetRoute implements Route {
+    constructor(private readonly usecase: CreateAtivoUseCase) {}
 
-export class ListFinancialAssetsRoute implements Route {
-    private constructor(
-        private readonly path: string,
-        private readonly method: HttpMethod,
-        private readonly listAssetsUseCase: ListFinancialAssetsUseCase
-    ) {}
+    public static create(usecase: CreateAtivoUseCase) {
+        return new CreateFinancialAssetRoute(usecase);
+    }
 
-    public static create(listAssetsUseCase: ListFinancialAssetsUseCase) {
-        return new ListFinancialAssetsRoute("/ativos", HttpMethod.GET, listAssetsUseCase);
+    public getPath() {
+        return "/ativos";
+    }
+
+     public getMethod(): HttpMethod {
+        return "post";
     }
 
     public getHandler() {
-        return async (_request: FastifyRequest, reply: FastifyReply) => {
-            try {
-                const assets = await this.listAssetsUseCase.execute();
+        return async (request:any, reply:any) => {
+            const bodySchema = z.object({
+                nome: z.string().min(1, "Nome é obrigatório"),
+                valorAtual: z.number().positive("Valor atual deve ser positivo"),
+                clientId: z.string().uuid("clientId deve ser um UUID válido"),
+            });
 
-                const responseBody = this.presentOutput(assets);
+            const body = bodySchema.safeParse(request.body);
 
-                reply.status(200).send(responseBody);
-            } catch (error) {
-                reply.status(500).send({ message: "Erro ao listar ativos financeiros" });
+            if (!body.success) {
+                return reply.status(400).send({ error: body.error.format() });
             }
+
+            const { nome, valorAtual, clientId } = body.data;
+
+            const ativo = FinancaAtivo.create(nome, valorAtual, clientId);
+
+            await this.usecase.execute(ativo);
+
+            return reply.status(201).send({ message: "Ativo criado com sucesso!" });
         };
     }
 
-    public getPath(): string {
-        return this.path;
-    }
-
-    public getMethod(): HttpMethod {
-        return this.method;
-    }
-
-    private presentOutput(assets: ListFinancialAssetsUseCase["execute"] extends (...args: any) => Promise<infer R> ? R : never): ListFinancialAssetsResponseDTO {
-        return {
-            ativos: assets.map(asset => ({
-                id: asset.id,
-                nome: asset.nome,
-                valorAtual: asset.valorAtual,
-                clientId: asset.clientId,
-            })),
-        };
+    public register(app: FastifyInstance): void {
+        app[this.getMethod().toLowerCase() as "post"](this.getPath(), this.getHandler());
     }
 }

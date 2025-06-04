@@ -1,6 +1,7 @@
-import { FastifyInstance } from "fastify";
-
-export async function ativoRoutes(app: FastifyInstance) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ativoRoutes = ativoRoutes;
+async function ativoRoutes(app) {
     app.get("/ativos", async () => {
         return [
             { nome: "Ação XYZ", valor: 125.50 },

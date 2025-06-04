@@ -42,8 +42,14 @@ export class Client {
     }
 
     public toObject() {
-        return { ...this._props };
+        return {
+            id: this.id,
+            nome: this.nome,
+            email: this.email,
+            status: this.status,
+            createdAt: this._props.createdAt,
+            updatedAt: this._props.updatedAt,
+        };
     }
-
 
 }

@@ -26,28 +26,25 @@ export class UpdateClientUseCase implements UseCase<UpdateClientInputDTO, Update
     }
 
     public async execute(input: UpdateClientInputDTO): Promise<UpdateClientOutputDTO> {
-        // Primeiro, busca o cliente existente
         const existingClient = await this.clienteGateway.findById(input.id);
         if (!existingClient) {
             throw new Error("Cliente não encontrado");
         }
 
-        // Cria uma nova instância de Client com os dados atualizados
-        // @ts-ignore
-        const updatedClient = Client.create({
+        const updatedClient = Client.with({
             id: input.id,
             nome: input.nome,
             email: input.email,
-            status: input.status
+            status: input.status,
+            createdAt: existingClient.toObject().createdAt,
+            updatedAt: new Date()
         });
 
-        // Atualiza o cliente usando o gateway
         const savedClient = await this.clienteGateway.update(updatedClient);
 
-        // Formata a saída
-        // @ts-ignore
         return this.presenteOutput(savedClient);
     }
+
 
     private presenteOutput(cliente: Client): UpdateClientOutputDTO {
         const clientData = cliente.toObject();

@@ -23,11 +23,11 @@ export class ListClientUseCase implements UseCase<ListClientInputDTO, ListClient
     public async execute(): Promise<ListClientOutputDTO> {
         const clientes = await this.clienteGateway.list();
 
-        const output = this.presenteOutput(clientes);
+        const output = this.presentOutput(clientes);
         return output;
     }
 
-    private presenteOutput(cliente: Client[]): ListClientOutputDTO {
+    private presentOutput(cliente: Client[]): ListClientOutputDTO {
         return {
             cliente: cliente.map((p) => ({
                 id: p.id,

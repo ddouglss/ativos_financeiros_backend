@@ -55,8 +55,8 @@ export class ClienteRepositoryPrisma implements ClienteGateway {
         });
     }
 
-    async update(client: Client): Promise<void> {
-        await this.prismaClient.cliente.update({
+    async update(client: Client): Promise<Client> {
+        const updated = await this.prismaClient.cliente.update({
             where: { id: client.id },
             data: {
                 nome: client.nome,
@@ -65,7 +65,17 @@ export class ClienteRepositoryPrisma implements ClienteGateway {
                 updatedAt: new Date(),
             }
         });
+
+        return Client.with({
+            id: updated.id,
+            nome: updated.nome,
+            email: updated.email,
+            status: updated.status,
+            createdAt: updated.createdAt,
+            updatedAt: updated.updatedAt,
+        });
     }
+
 
     async delete(id: string): Promise<void> {
         await this.prismaClient.cliente.delete({
