@@ -1,17 +1,42 @@
-domain/: Regras de negócio puras.
+# 🧾 Ativos Financeiros - API Fastify
 
-usecases/: Casos de uso da aplicação (interação entre entidades e repositórios).
+Uma API desenvolvida para um escritório de investimentos, com o objetivo de **gerenciar clientes** e **listar informações básicas sobre ativos financeiros**.
 
-infra/: Implementações reais (banco de dados, Prisma, etc.).
+---
 
-http/: Entrada e saída da aplicação (Fastify, controladores, rotas).
+## 🚀 Tecnologias Utilizadas
 
-validators/: Esquemas de validação usando zod.
+- [Node.js](https://nodejs.org/)
+- [Fastify](https://www.fastify.io/)
+- [Prisma ORM](https://www.prisma.io/)
+- [MySQL](https://www.mysql.com/)
+- [Docker](https://www.docker.com/)
+- [Zod](https://zod.dev/)
+- Arquitetura Limpa (Clean Architecture)
+- Princípios SOLID
 
-middlewares/: Tratadores de erro, autenticação etc.
+---
 
-env.ts: Carrega e valida variáveis de ambiente.
+## 📋 Funcionalidades
 
-app.ts: Criação da instância Fastify.
+### 📁 Clientes
+- ✅ **Criar cliente** (`POST /clientes`)
+- ✅ **Listar todos os clientes** (`GET /clientes`)
+- ✅ **Editar cliente por ID** (`PUT /clientes/:id`)
 
-main.ts: Inicializa e sobe o servidor.
+### 💹 Ativos Financeiros
+- ✅ **Listar ativos fixos** (`GET /ativos`)
+  - Exemplo de retorno:
+    ```json
+    [
+      { "nome": "Ação XYZ", "valor": 150.50 },
+      { "nome": "Fundo ABC", "valor": 300.75 }
+    ]
+    ```
+
+---
+
+## 🧱 Arquitetura
+
+Este projeto segue os princípios da **Arquitetura Limpa** e os princípios **SOLID**, com separação clara de responsabilidades:
+
