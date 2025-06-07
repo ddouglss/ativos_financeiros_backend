@@ -1,8 +1,8 @@
 import { ClienteRepositoryPrisma } from "@/infra/repositories/cliente/cliente.repository.prisma";
 import { AtivoRepositoryPrisma } from "@/infra/repositories/ativos/ativo.repository.prisma";
 import { prisma } from "@/package/prisma/prisma";
-import Fastify from 'fastify';
-import cors from '@fastify/cors';
+import Fastify from "fastify";
+import cors from "@fastify/cors";
 
 // CLIENTES - USE CASES
 import { CreateClientUseCase } from "@/usecases/client/create-client/create-client.usecase";
@@ -59,35 +59,39 @@ async function server() {
     const updateAtivoRoute = UpdateAtivoRoute.create(updateAtivoUsecase);
     const deleteAtivoRoute = DeleteAtivoRoute.create(deleteAtivoUsecase);
 
+    // FASTIFY INSTANCE (única instância para tudo)
+    const app = Fastify({ logger: true });
 
-    const api = FastifyApi.create([
+    // CORS
+    await app.register(cors, {
+        origin: ["http://localhost:5000", "http://localhost:3000", "https://seu-front-deploy.vercel.app"],
+        methods: ["get", "post", "put", "delete", "options"],
+    });
+
+    // ROTA TESTE
+    app.get("/api/hello", async () => {
+        return { message: "Hello from Railway backend!" };
+    });
+
+    // REGISTRO DAS ROTAS DA API via wrapper, passando a instância Fastify
+    FastifyApi.registerRoutes(app, [
         createClienteRoute,
         listClienteRoute,
         updateClienteRoute,
         deleteClienteRoute,
-
         createAtivoRoute,
         listAtivoRoute,
         updateAtivoRoute,
         deleteAtivoRoute,
     ]);
 
-
-    const server = Fastify({ logger: true });
-
-    await server.register(cors, {
-        origin: ['http://localhost:5000', 'http://localhost:3000', 'https://seu-front-deploy.vercel.app'],
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    });
-
-    server.get('/api/hello', async () => {
-        return { message: 'Hello from Railway backend!' };
-    });
-
-    const port = Number(process.env.PORT) || 3000;
-
-    server.listen({ port, host: '0.0.0.0' });
-
+    // START SERVER
+    const port = Number(process.env.PORT) || 3001;
+    await app.listen({ port, host: "0.0.0.0" });
 }
 
-server();
+// Chamando a função de start do servidor
+server().catch((err) => {
+    console.error("Error starting server:", err);
+    process.exit(1);
+});

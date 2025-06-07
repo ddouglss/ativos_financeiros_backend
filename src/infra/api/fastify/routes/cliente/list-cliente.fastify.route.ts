@@ -20,7 +20,7 @@ export class ListClienteRoute implements Route {
 
     public static create(listClienteService: ListClientUseCase): ListClienteRoute {
         return new ListClienteRoute(
-            "/clientes",
+            "/clientes/:id",
             HttpMethod.GET,
             listClienteService
         );

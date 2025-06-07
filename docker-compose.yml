@@ -6,10 +6,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: investimento
-      MYSQL_USER: root
+      MYSQL_USER: appuser
       MYSQL_PASSWORD: aurora
     ports:
-      - "3307:3306"
+      - "3307:3306" # Porta externa 3307 -> interna 3306
     volumes:
       - mysql-data:/var/lib/mysql
 
@@ -19,13 +19,16 @@ services:
       dockerfile: Dockerfile
     container_name: fastify-backend
     ports:
-      - "3000:3000"
+      - "3001:3001"
     environment:
-      DATABASE_URL: "mysql://root:aurora@db:3306/investimento"
+      DATABASE_URL: "mysql://appuser:aurora@mysql-db:3306/investimento"
       NODE_ENV: "production"
     depends_on:
       - db
     restart: always
+    command: [ "./wait-for-it.sh", "db:3306", "--", "npm", "run", "dev" ]
+    volumes:
+      - .:/app
 
 volumes:
   mysql-data:
